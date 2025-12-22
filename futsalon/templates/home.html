@@ -1,91 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="max-w-7xl mx-auto space-y-12">
-
-    <!-- خوش‌آمدید + تاریخ -->
-    <div class="text-center py-16 bg-gradient-to-br from-blue-900 to-red-800 rounded-3xl shadow-2xl text-white">
-        <h1 class="text-6xl font-extrabold mb-6 drop-shadow-2xl">
-            خوش آمدید، مدیر عزیز! ⚽
-        </h1>
-        <p class="text-3xl mb-8 opacity-95">
-            به پنل مدیریت سالن فوتسال
-        </p>
-        <div class="text-2xl space-y-2">
-            <p class="font-bold text-yellow-300">{{ today_persian_full }}</p>
-            <p class="text-lg opacity-80">{{ today_gregorian }}</p>
-        </div>
-    </div>
-
-    <!-- دو کارت بزرگ: درآمد و بدهی -->
-    <div class="grid md:grid-cols-2 gap-10">
-        
-        <!-- کارت مجموع درآمد -->
-        <div class="bg-gradient-to-br from-green-600 to-green-700 rounded-3xl shadow-2xl p-10 text-white text-center transform hover:scale-105 transition duration-300">
-            <div class="flex justify-center mb-8">
-                <svg class="w-24 h-24 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                </svg>
-            </div>
-            <h2 class="text-3xl font-bold mb-6">مجموع درآمد سالن</h2>
-            <p class="text-6xl font-extrabold mb-4">
-                {{ "{:,.0f}".format(total_income) }}
-                <span class="text-3xl font-normal">تومان</span>
-            </p>
-            <p class="text-xl opacity-90 mt-6">
-                از {{ sessions_count }} سانس ثبت شده
-            </p>
-        </div>
-
-        <!-- کارت مجموع بدهی -->
-        <div class="bg-gradient-to-br from-red-600 to-red-700 rounded-3xl shadow-2xl p-10 text-white text-center transform hover:scale-105 transition duration-300">
-            <div class="flex justify-center mb-8">
-                <svg class="w-24 h-24 text-red-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-            </div>
-            <h2 class="text-3xl font-bold mb-6">مجموع بدهی بازیکنان</h2>
-            <p class="text-6xl font-extrabold mb-4">
-                {{ "{:,.0f}".format(total_debt) }}
-                <span class="text-3xl font-normal">تومان</span>
-            </p>
-            {% if total_debt == 0 %}
-                <p class="text-2xl mt-6 text-green-300 font-bold">همه تسویه کردن! 🎉</p>
-            {% else %}
-                <p class="text-xl opacity-90 mt-6">
-                    از {{ players_count }} بازیکن فعال
-                </p>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- کارت‌های دسترسی سریع -->
-    <div class="grid md:grid-cols-3 gap-8">
-        <a href="/players" class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 text-white text-center shadow-xl hover:shadow-2xl transform hover:-translate-y-3 transition">
-            <svg class="w-20 h-20 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-            </svg>
-            <h3 class="text-2xl font-bold">مدیریت بازیکنان</h3>
-            <p class="mt-4 text-lg opacity-90">اضافه، ویرایش و حذف</p>
-        </a>
-
-        <a href="/sessions/new" class="bg-gradient-to-br from-red-600 to-red-700 rounded-2xl p-8 text-white text-center shadow-xl hover:shadow-2xl transform hover:-translate-y-3 transition">
-            <svg class="w-20 h-20 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <h3 class="text-2xl font-bold">ثبت سانس جدید</h3>
-            <p class="mt-4 text-lg opacity-90">شروع یک بازی جدید!</p>
-        </a>
-
-        <a href="/debts" class="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-8 text-white text-center shadow-xl hover:shadow-2xl transform hover:-translate-y-3 transition">
-            <svg class="w-20 h-20 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4m-6 6h6"/>
-            </svg>
-            <h3 class="text-2xl font-bold">گزارش بدهی‌ها</h3>
-            <p class="mt-4 text-lg opacity-90">مشاهده و تسویه حساب</p>
-        </a>
-    </div>
-
-</div>
-{% endblock %}
