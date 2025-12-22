@@ -7,3 +7,4 @@ python-multipart==0.0.9
 aiofiles==24.1.0
 jdatetime==5.0.0
 starlette==0.38.5
+itsdangerous
