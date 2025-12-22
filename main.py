@@ -8,12 +8,32 @@ from models import Player, Session as FSession, Payment, User
 from datetime import date
 import json
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 import jdatetime
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-app.add_middleware(SessionMiddleware, secret_key="secret-key")  # تغییر بده
+
+class AuthMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.url.path in ["/login", "/favicon.ico"]:
+            return await call_next(request)
+        
+        if request.url.path.startswith("/static/"):
+            return await call_next(request)
+        
+        if request.session.get("user_id") is None:
+            return RedirectResponse(url="/login")
+        
+        return await call_next(request)
+
+
+app.add_middleware(AuthMiddleware)
+
+app.add_middleware(SessionMiddleware, secret_key="Avz*K5h6gyL_sd#@$5464")
+
+
 
 create_db_and_tables()
 
@@ -31,7 +51,7 @@ def get_current_user(request: Request):
     if not user_id:
         raise HTTPException(status_code=401, detail="Not authenticated")
     return user_id
-
+                   
 # صفحه لاگین
 @app.get("/login", response_class=HTMLResponse)
 def login_page(request: Request):
