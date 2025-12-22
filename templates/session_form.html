@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h2 class="text-4xl font-bold mb-10 text-blue-900 flex items-center justify-center">
+        <svg class="w-12 h-12 ml-4 text-rose-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        {% if session %}ویرایش سانس{% else %}سانس جدید{% endif %}
+    </h2>
+
+    <form method="post" action="{% if session %}/sessions/{{ session.id }}/edit{% else %}/sessions{% endif %}" class="space-y-8">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <label class="block text-lg font-semibold mb-3 text-blue-800">تاریخ سانس</label>
+                    <input type="date" name="date_str" value="{{ session.date if session else '' }}" required
+                           class="w-full p-4 text-lg border-2 border-blue-300 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-200 transition">
+                </div>
+                <div>
+                    <label class="block text-lg font-semibold mb-3 text-blue-800">قیمت سانس (تومان)</label>
+                    <input type="number" name="price" value="{{ session.price if session else '' }}" required
+                           class="w-full p-4 text-lg border-2 border-blue-300 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-200 transition">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-lg font-semibold mb-4 text-blue-800">بازیکنان حاضر</label>
+                <div id="player-tags" class="min-h-32 border-4 border-dashed border-green-400 rounded-xl p-6 mb-6 flex flex-wrap gap-3 bg-green-50"></div>
+                <input type="text" id="player-input" list="players-list" placeholder="نام بازیکن را تایپ کنید و Enter بزنید..."
+                       class="w-full p-4 text-lg border-2 border-blue-300 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-200 transition">
+                <input type="hidden" name="players_json" id="players_json" value="{{ selected_players|default('[]') }}">
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-2xl px-12 py-6 rounded-2xl shadow-2xl transform hover:scale-105 transition inline-flex items-center">
+                {% if session %}بروزرسانی سانس{% else %}ذخیره سانس{% endif %}
+                <svg class="w-10 h-10 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                </svg>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="/static/script.js" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const players = {{ players | safe }};
+        const selected = {{ selected_players|default('[]') | safe }};
+        
+        if (typeof initAutocomplete === 'function') {
+            initAutocomplete(players, selected);
+        }
+    });
+</script>
+{% endblock %}
