@@ -4,10 +4,26 @@
     <meta charset="UTF-8">
     <title>ورود</title>
     <link href="/static/tailwind.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: "Vazirmatn-Fontara";
+            src:
+                url(/static/Vazirmatn.woff2)
+                format("woff2 supports variations"),
+                url(/static/Vazirmatn.woff2)
+                format("woff2-variations");
+            font-weight: 100 900;
+            font-style: normal;
+            font-display: swap;
+            unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        body {
+            font-family: "Vazirmatn-Fontara", sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-cover bg-center min-h-screen flex items-center justify-center" style="background-image: url('https://wallpapers.com/images/hd/cool-football-stadium-spotlights-pnjw0muf781r1u4f.jpg');">
-    <div class="bg-white/95 backdrop-blur-lg p-12 rounded-3xl shadow-2xl w-96 text-center">
-        <img src="https://thumbs.dreamstime.com/b/fast-paced-soccer-action-shot-dynamic-energy-futsal-player-indoor-sports-game-motion-footwear-ball-legs-team-goal-speed-skill-377308563.jpg" class="w-32 h-32 mx-auto mb-6 rounded-full border-4 border-red-500">
+    <div class="bg-white backdrop-blur-lg p-12 rounded-3xl shadow-2xl w-96 text-center">
         <h2 class="text-3xl font-bold mb-8 text-blue-900">ورود مدیر</h2>
         <form method="post" action="/login" class="space-y-6">
             <input type="text" name="username" placeholder="نام کاربری" required class="w-full p-4 text-lg border-2 border-blue-400 rounded-xl focus:border-red-500">
