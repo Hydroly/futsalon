@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, Form, Request, Response
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import select, Session as DBSession
@@ -299,3 +299,7 @@ def add_payment(player_id: int = Form(...), amount: float = Form(...), db: DBSes
     db.add(payment)
     db.commit()
     return RedirectResponse(url="/debts", status_code=303)
+
+@app.get("/backup", response_class=FileResponse)
+def backup_database(user=Depends(get_current_user)):
+    return FileResponse("database.db", media_type="application/x-sqlite3", filename="database.db")
