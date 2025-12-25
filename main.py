@@ -81,11 +81,9 @@ def home(request: Request, db: DBSession = Depends(get_session), user=Depends(ge
     sessions = db.exec(select(FSession)).all()
     payments = db.exec(select(Payment)).all()
 
-    # محاسبه مجموع درآمد کل (قیمت همه سانس‌ها)
-    total_income = sum(s.price for s in sessions)
-
-    # محاسبه مجموع بدهی خالص (بدهی کل منهای تسویه‌ها)
     total_debt = 0.0
+    total_income = 0.0
+
     for player in players:
         player_debt = 0
         for s in sessions:
@@ -97,6 +95,7 @@ def home(request: Request, db: DBSession = Depends(get_session), user=Depends(ge
                 continue
         # کم کردن مبلغ تسویه شده
         paid = sum(p.amount for p in payments if p.player_id == player.id)
+        total_income += paid  # مجموع دریافتی‌ها
         total_debt += (player_debt - paid)
 
     # تاریخ شمسی کامل و فارسی
@@ -111,8 +110,8 @@ def home(request: Request, db: DBSession = Depends(get_session), user=Depends(ge
     }
     
     persian_days = {
-        0: "دوشنبه", 1: "سه‌شنبه", 2: "چهارشنبه",
-        3: "پنج‌شنبه", 4: "جمعه", 5: "شنبه", 6: "یکشنبه"
+        2: "دوشنبه", 3: "سه‌شنبه", 4: "چهارشنبه",
+        5: "پنج‌شنبه", 6: "جمعه", 0: "شنبه", 1: "یکشنبه"
     }
     
     day_name = persian_days[today_jalali.weekday()]
